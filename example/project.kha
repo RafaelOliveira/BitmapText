@@ -1,0 +1,77 @@
+{
+	"format": 2,
+	"game": {
+		"name": "Example",
+		"width": 800,
+		"height": 600
+	},
+	"assets": [        
+        {
+            "type": "image",
+            "file": "Bevan.png",
+            "name": "Bevan.png"
+        },
+        {
+            "type": "blob",
+            "file": "Bevan.fnt",
+            "name": "Bevan.fnt"
+        },
+        {
+            "type": "image",
+            "file": "Oswald-Regular.png",
+            "name": "Oswald-Regular.png"
+        },
+        {
+            "type": "blob",
+            "file": "Oswald-Regular.fnt",
+            "name": "Oswald-Regular.fnt"
+        },
+        {
+            "type": "image",
+            "file": "Pacifico.png",
+            "name": "Pacifico.png"
+        },
+        {
+            "type": "blob",
+            "file": "Pacifico.fnt",
+            "name": "Pacifico.fnt"
+        },
+        {
+            "type": "image",
+            "file": "bt_alignment.png",
+            "name": "btAlignment"
+        },
+        {
+            "type": "image",
+            "file": "bt_color.png",
+            "name": "btColor"
+        },
+        {
+            "type": "image",
+            "file": "bt_text.png",
+            "name": "btText"
+        }
+	],
+	"rooms": [
+		{
+            "name": "base",
+            "parent": null,
+            "neighbours": [],
+            "assets":
+            [                
+                "Bevan.png",
+                "Bevan.fnt",
+                "Oswald-Regular.png",
+                "Oswald-Regular.fnt",
+                "Pacifico.png",
+                "Pacifico.fnt",
+                "btAlignment",
+                "btColor",
+                "btText"
+            ]
+        }
+	],
+	"sources": [        
+        "../lib"
+    ]
+}
