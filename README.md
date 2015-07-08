@@ -2,6 +2,37 @@
 A bitmap text render for Kha based on Angel Code format
 
 ## How to use
+
+In your project.kha specify the texture and the font file with the extension  
+You can create the font file with apps like [Littera]
+```
+"assets": [
+    {
+        "type": "image",
+        "file": "Pacifico.png",
+        "name": "Pacifico.png"
+    },
+    {
+        "type": "blob",
+        "file": "Pacifico.fnt",
+        "name": "Pacifico.fnt"
+    }
+],
+"rooms": [
+	{
+        "name": "base",
+        "parent": null,
+        "neighbours": [],
+        "assets":
+        [
+            
+            "Pacifico.png",
+            "Pacifico.fnt"
+        ]
+    }
+]
+```
+
 Load the fonts to the chache
 ```
 BitmapText.loadFont('font-name');
@@ -36,3 +67,4 @@ With this you can render the text using it's image.
 ```
 g.drawImage(text1.image, 125, 30);
 ```
+[Littera]:http://kvazars.com/littera/
