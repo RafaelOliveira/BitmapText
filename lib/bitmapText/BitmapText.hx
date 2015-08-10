@@ -336,16 +336,16 @@ class BitmapText
 		var nextLine = false;
 		var lastWord = false;
 		
-		for (word in words)
+		for (i in 0...words.length)
 		{
-			if (word == words[words.length - 1])
+			if (i == (words.length - 1))
 				lastWord = true;
 			
-			if (word != ' ')
+			if (words[i] != ' ')
 			{
-				for (i in 0...word.length)
+				for (j in 0...words[i].length)
 				{
-					char = word.charAt(i);
+					char = words[i].charAt(j);
 					charCode = Utf8.charCodeAt(char, 0);
 					
 					letter = font.letters.get(charCode);	
