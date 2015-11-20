@@ -5,7 +5,6 @@ import kha.Framebuffer;
 import kha.Game;
 import kha.Image;
 import kha.Loader;
-import kha.Rectangle;
 import kha.Scaler;
 import kha.Sys;
 import kha.LoadingScreen;
@@ -25,9 +24,9 @@ class Example extends Game
 	var btAlignment:Image;
 	
 	// area for checking if a button was clicked
-	var areaBtAlignment:Rectangle;
-	var areaBtColor:Rectangle;
-	var areaBtText:Rectangle;
+	var areaBtAlignment:Rect;
+	var areaBtColor:Rect;
+	var areaBtText:Rect;
 	
 	// text	
 	var text1:BitmapText;
@@ -72,9 +71,9 @@ class Example extends Game
 		indexColor = 0;
 		indexText = -1;
 		
-		areaBtText = new Rectangle(15, 544, 121, 41);
-		areaBtColor = new Rectangle(151, 544, 130, 41);
-		areaBtAlignment = new Rectangle(296, 544, 171, 41);
+		areaBtText = new Rect(15, 544, 121, 41);
+		areaBtColor = new Rect(151, 544, 130, 41);
+		areaBtAlignment = new Rect(296, 544, 171, 41);
 		
 		Configuration.setScreen(new LoadingScreen());
 		Loader.the.loadRoom("base", roomLoaded);
@@ -154,7 +153,7 @@ class Example extends Game
 	{	
 		// Check the buttons clicked
 		
-		if (checkButtonClicked(areaBtText, x, y))
+		if (areaBtText.pointInside(x, y))
 		{
 			indexText *= -1;
 			
@@ -165,7 +164,7 @@ class Example extends Game
 				
 			text3.update();			
 		}
-		else if (checkButtonClicked(areaBtColor, x, y))
+		else if (areaBtColor.pointInside(x, y))
 		{
 			indexColor++;
 			if (indexColor == colors.length)
@@ -174,7 +173,7 @@ class Example extends Game
 			text3.color = colors[indexColor];
 			text3.update();
 		}
-		else if (checkButtonClicked(areaBtAlignment, x, y))
+		else if (areaBtAlignment.pointInside(x, y))
 		{
 			switch(text3.align)
 			{
@@ -185,14 +184,5 @@ class Example extends Game
 			
 			text3.update();
 		}
-	}
-	
-	function checkButtonClicked(rect:Rectangle, x:Int, y:Int)
-	{
-		if (x > rect.x && x < (rect.x + rect.width)
-			&& y > rect.y && y < (rect.y + rect.height))
-			return true;
-		else
-			return false;
 	}
 }
