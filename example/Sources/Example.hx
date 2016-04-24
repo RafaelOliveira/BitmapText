@@ -1,19 +1,19 @@
 package;
 
+import kha.Assets;
 import kha.Color;
 import kha.Framebuffer;
-import kha.Game;
 import kha.Image;
-import kha.Loader;
 import kha.Scaler;
-import kha.Sys;
-import kha.LoadingScreen;
-import kha.Configuration;
+import kha.Scheduler;
+import kha.System;
+import kha.graphics2.ImageScaleQuality;
+import kha.input.Mouse;
 import kha.graphics2.Graphics;
 import bitmapText.BitmapText;
 import bitmapText.BitmapTextAlign;
 
-class Example extends Game 
+class Example
 {
 	var backbuffer:Image;
 	var g:Graphics;
@@ -36,8 +36,8 @@ class Example extends Game
 	var sampleText1:String;
 	var sampleText2:String;
 	
-	var colors = [ Color.fromValue(0x104e8b), Color.Black, Color.Blue, Color.Cyan, Color.Green, 
-				   Color.Magenta, Color.Orange, Color.Pink, Color.Purple, Color.Red, Color.White, Color.Yellow ];
+	var colors = [ Color.Black, Color.Blue, Color.Cyan, Color.Green, Color.Magenta, Color.Orange,
+				   Color.Pink, Color.Purple, Color.Red, Color.White, Color.Yellow ];
 	
 	var indexColor:Int;
 	var indexText:Int;
@@ -46,21 +46,13 @@ class Example extends Game
 	
 	public function new() 
 	{
-		super("Example", false);
+		Assets.loadEverything(assetsLoaded);
 	}
 	
-	override public function init():Void 
-	{
-		super.init();		
-		
+	public function assetsLoaded():Void 
+	{				
 		backbuffer = Image.createRenderTarget(800, 600);
-		g = backbuffer.g2;
-		
-		#if js
-		// this isn't working. Needs to change manually in kha.graphics4.Graphics2.jx
-		// https://github.com/KTXSoftware/Kha/issues/101
-		cast(backbuffer.g2, kha.graphics4.Graphics2).setBilinearFiltering(true);
-		#end
+		g = backbuffer.g2;		
 		
 		sampleText1 = 'Kha is a low level SDK for building games and media ' +
 		'applications in a portable way, based on Haxe and GLSL.';
@@ -73,14 +65,8 @@ class Example extends Game
 		
 		areaBtText = new Rect(15, 544, 121, 41);
 		areaBtColor = new Rect(151, 544, 130, 41);
-		areaBtAlignment = new Rect(296, 544, 171, 41);
-		
-		Configuration.setScreen(new LoadingScreen());
-		Loader.the.loadRoom("base", roomLoaded);
-	}
-	
-	function roomLoaded():Void
-	{
+		areaBtAlignment = new Rect(296, 544, 171, 41);						
+				
 		// loading the fonts to the cache
 		
 		BitmapText.loadFont('Bevan');
@@ -89,9 +75,9 @@ class Example extends Game
 		
 		// creating some buttons
 		
-		btAlignment = Loader.the.getImage('btAlignment');
-		btColor = Loader.the.getImage('btColor');
-		btText = Loader.the.getImage('btText');
+		btAlignment = Assets.images.bt_alignment;
+		btColor = Assets.images.bt_color;
+		btText = Assets.images.bt_text;
 		
 		// creating the bitmaptexts
 		
@@ -110,15 +96,21 @@ class Example extends Game
 			color: colors[indexColor],
 			lineHeight: 55 			
 		});
+
+		Mouse.get().notify(mouseDown, null, null, null);
 		
-		Configuration.setScreen(this);
+		System.notifyOnRender(render);		
+		#if cpp
+		Scheduler.addTimeTask(update, 0, 1 / 60);
+		#end
 	}
 	
 	#if cpp
 	// temporary fix for cpp
 	// BitmapText render the text when is created
-	// but in cpp it needs to render again (only one time) after the roomLoaded() function
-	override public function update():Void 
+	// but in cpp it needs to render again (only one time) after the assetsLoaded() function
+	// https://github.com/KTXSoftware/Kha/issues/104
+	function update():Void 
 	{
 		if (firstTime)
 		{
@@ -130,8 +122,10 @@ class Example extends Game
 	}
 	#end
 	
-	override public function render(frame:Framebuffer):Void 
+	function render(frame:Framebuffer):Void 
 	{
+		frame.g2.imageScaleQuality = ImageScaleQuality.High;
+		
 		g.begin(true, Color.fromValue(0x87cefa));
 		
 		g.drawImage(text1.image, 125, 30);
@@ -144,12 +138,12 @@ class Example extends Game
 		
 		g.end();
 		
-		startRender(frame);
-		Scaler.scale(backbuffer, frame, Sys.screenRotation);
-		endRender(frame);
+		frame.g2.begin();
+		Scaler.scale(backbuffer, frame, System.screenRotation);
+		frame.g2.end();
 	}
 		
-	override public function mouseDown(x:Int, y:Int):Void 
+	function mouseDown(button:Int, x:Int, y:Int):Void 
 	{	
 		// Check the buttons clicked
 		

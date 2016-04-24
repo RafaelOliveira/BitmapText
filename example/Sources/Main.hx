@@ -1,12 +1,13 @@
 package;
 
-import kha.Starter;
+import kha.System;
 
 class Main 
 {
 	public static function main() 
 	{
-		var starter = new Starter();
-		starter.start(new Example());
+		System.init({ title: 'Example', width: 800, height: 600 }, function() {
+			new Example();
+		});
 	}
 }

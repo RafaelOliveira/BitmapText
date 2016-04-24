@@ -1,10 +1,10 @@
 package bitmapText;
 
 import haxe.Utf8;
+import kha.Assets;
 import kha.Blob;
 import kha.Color;
 import kha.Image;
-import kha.Loader;
 import kha.math.Vector2;
 
 typedef Font = {
@@ -137,8 +137,10 @@ class BitmapText
 	 */
 	public static function loadFont(fontName:String) 
 	{
-		var image = Loader.the.getImage('${fontName}.png');
-		var data = Loader.the.getBlob('${fontName}.fnt');
+		var fileName = StringTools.replace(fontName, '-', '_');
+		
+		var image = Reflect.field(Assets.images, fileName);
+		var data = Reflect.field(Assets.blobs, '${fileName}_fnt');
 		
 		processFont(fontName, image, data);
 	}
